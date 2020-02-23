@@ -1,9 +1,10 @@
+#include "queue.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "harness.h"
-#include "queue.h"
 
 /*
  * Create empty queue.
@@ -13,15 +14,25 @@ queue_t *q_new()
 {
     queue_t *q = malloc(sizeof(queue_t));
     /* TODO: What if malloc returned NULL? */
-    q->head = NULL;
+    if (q != NULL) {
+        q->head = NULL;
+        q->size = 0;
+    }
     return q;
 }
 
 /* Free all storage used by queue */
 void q_free(queue_t *q)
 {
-    /* TODO: How about freeing the list elements and the strings? */
-    /* Free queue structure */
+    if (!q)
+        return;
+    for (list_ele_t *pre, *cur = q->head; cur != NULL;) {
+        free(cur->value);
+        pre = cur;
+        cur = cur->next;
+        free(pre);
+    }
+
     free(q);
 }
 
@@ -36,11 +47,29 @@ bool q_insert_head(queue_t *q, char *s)
 {
     list_ele_t *newh;
     /* TODO: What should you do if the q is NULL? */
+    if (q == NULL)
+        return false;
+
     newh = malloc(sizeof(list_ele_t));
+
+    if (newh == NULL)
+        return false;
+
+    new_char = malloc(strlen(s) + 1);
+    if (new_char == NULL) {
+        free(newh);
+        return false;
+    }
+
     /* Don't forget to allocate space for the string and copy it */
     /* What if either call to malloc returns NULL? */
+
     newh->next = q->head;
     q->head = newh;
+    q->value = new_char;
+    strpy(new_char, s);
+
+    q->size++;
     return true;
 }
 
