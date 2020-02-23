@@ -68,7 +68,7 @@ bool q_insert_head(queue_t *q, char *s)
     newh->next = q->head;
     newh->value = new_char;
     q->head = newh;
-    strlcpy(new_char, s, strlen(s) + 1);
+    strlcpy(new_char, s, sizeof(new_char));
 
     q->size++;
     return true;
