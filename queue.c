@@ -46,6 +46,7 @@ void q_free(queue_t *q)
 bool q_insert_head(queue_t *q, char *s)
 {
     list_ele_t *newh;
+    char *new_char;
     /* TODO: What should you do if the q is NULL? */
     if (q == NULL)
         return false;
@@ -65,9 +66,9 @@ bool q_insert_head(queue_t *q, char *s)
     /* What if either call to malloc returns NULL? */
 
     newh->next = q->head;
+    newh->value = new_char;
     q->head = newh;
-    q->value = new_char;
-    strpy(new_char, s);
+    strlcpy(new_char, s, strlen(s) + 1);
 
     q->size++;
     return true;
