@@ -16,6 +16,7 @@ queue_t *q_new()
     /* TODO: What if malloc returned NULL? */
     if (q != NULL) {
         q->head = NULL;
+        q->tail = NULL;
         q->size = 0;
     }
     return q;
@@ -83,10 +84,29 @@ bool q_insert_head(queue_t *q, char *s)
  */
 bool q_insert_tail(queue_t *q, char *s)
 {
-    /* TODO: You need to write the complete code for this function */
-    /* Remember: It should operate in O(1) time */
-    /* TODO: Remove the above comment when you are about to implement. */
-    return false;
+    list_ele_t *newh;
+    char *new_char;
+
+    if (q == NULL)
+        return false;
+    newh = malloc(sizeof(list_ele_t));
+
+    if (newh == NULL)
+        return false;
+    new_char = malloc(strlen(s) + 1);
+    if (new_char == NULL) {
+        free(newh);
+        return false;
+    }
+    newh->next = NULL;
+    newh->value = new_char;
+    q->tail->next = newh;
+    q->tail = newh;
+    strlpy(new_char, s, sizeof(new_char));
+
+    q->size++;
+
+    return true;
 }
 
 /*
